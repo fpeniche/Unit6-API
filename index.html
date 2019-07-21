@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Giphy API</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+</head>
+
+<body>
+    <button data-sport="tennis">tennis</button>
+    <button data-sport="football">football</button>
+    <button data-sport="soccer">soccer</button>
+    <button data-sport="baseball">baseball</button>
+    <button data-sport="car-racing">car-racing</button>
+    <button data-sport="basketball">basketball</button>
+    <button data-sport="horse-racing">horse-racing</button>
+    <button data-sport="volleyball">volleyball</button>
+    <button data-sport="hockey">hockey</button>
+    <button data-sport="champions">champions league</button>
+    <button data-sport="lmb">mexican baseball league</button>
+    <button data-sport="real-madrid">real-madrid</button>
+    <button data-sport="barcelona">barcelona</button>
+    <button data-sport="wwe">wrestling</button>
+    <button data-sport="europe-league">europe-league</button>
+    <button data-sport="bayern-munich">bayern-munich</button>
+
+    <div id="gifs-appear-here">
+    </div>
+    
+    <script type="text/javascript">
+    $("button").on("click", function(){
+        var sport = $(this).attr("data-sport");
+        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+        sport + "&api_key=RDz5eAFrHwo5sFgS2BggASUu986MLIFL&limit=10";
+
+        $.ajax({
+        url: queryURL,
+        method: "GET"
+      }).then(function(response) {
+        // Run this file, click a button, and see what the response object looks like in the browser's console.
+        console.log(response);
+        // image information is inside the data key, make a variable named results and set it equal to response.data
+        var results= response.data;
+
+        for (var i = 0; i < results.length; i++) {
+
+        // Make a div with jQuery and store it in a variable named sportDiv.
+        var sportDiv = $("<div>");
+        // store the rating of the response for each image in a variable named rating
+        var rating = results[i].rating;
+        // Make a paragraph tag with jQuery and store it in a variable named p and set the inner text of the paragraph to the rating of the image in results[i].
+        var p = $("<p>").text("Rating: " + rating); 
+        // Make an image tag with jQuery and store it in a variable named sportImage.
+        var sportImage = $("<img>");
+        // Set the image's src to results[i]'s fixed_height.url.
+        sportImage.attr("src", results[i].images.fixed_height.url);
+            console.log(sportImage);
+            console.log(results[i].images.fixed_height.url);
+        // Append the p variable to the sportDiv variable.
+        sportDiv.append(p);
+        // Append the sportImage variable to the sportDiv variable.
+        sportDiv.append(sportImage);
+        // Prepend the sportDiv variable to the element with an id of gifs-appear-here.
+        $("#gifs-appear-here").prepend(sportDiv);
+         }
+      });
+    });
+
+    </script>
+</body>
+</html>
