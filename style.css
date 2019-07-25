@@ -1,0 +1,31 @@
+button{
+    margin: 1px;
+    margin-bottom: 2px;
+}
+.add{
+    float: right;
+}
+
+.jumbotron{
+    background-color:lightcyan;
+    height: 380px;
+    width: 75%;
+    margin-left: 180px;
+}
+
+#label{
+    margin-top: 10px;
+
+}
+
+#sport-input{
+    margin-top: 15px;
+}
+
+.display-6{
+    margin-top: 17px;
+}
+#add-sport
+{
+    margin-top: 15px;
+}

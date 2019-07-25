@@ -5,32 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Giphy API</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css"/>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 
 </head>
 
 <body>
-    <button data-sport="tennis">tennis</button>
-    <button data-sport="football">football</button>
-    <button data-sport="soccer">soccer</button>
-    <button data-sport="baseball">baseball</button>
-    <button data-sport="car-racing">car-racing</button>
-    <button data-sport="basketball">basketball</button>
-    <button data-sport="horse-racing">horse-racing</button>
-    <button data-sport="volleyball">volleyball</button>
-    <button data-sport="hockey">hockey</button>
-    <button data-sport="champions">champions league</button>
-    <button data-sport="lmb">mexican baseball league</button>
-    <button data-sport="real-madrid">real-madrid</button>
-    <button data-sport="barcelona">barcelona</button>
-    <button data-sport="wwe">wrestling</button>
-    <button data-sport="europe-league">europe-league</button>
-    <button data-sport="bayern-munich">bayern-munich</button>
+    <div class="jumbotron">
+        <div id="buttons-view">
+        </div>
+        <div class="add">
+        <form id="sport-form">
+            <label for="sport-input"><h1 class="display-6">Add a sport!</h1></label>
+            <input type="text" id="sport-input"><br>
+            <!-- Button triggers new sport to be added -->
+            <input id="add-sport" class="btn btn-primary btn-lg" type="submit" value="Add a sport, billy!">
+        </form>
+        </div>
+    <div id="gifs-appear-here"></div>
 
-    <div id="gifs-appear-here">
     </div>
-    
     <script type="text/javascript">
+
+    var sports = ["tennis","football","soccer","baseball","car-racing","basketball","horse-racing","volleyball","hockey","champions","lmb","real-madrid","barcelona","wwe","europe-league","bayern-munich","nfl","nhl"];
+    // when the page is loaded run this code
+    $(function(){
+    renderButtons();
+
     $("button").on("click", function(){
         var sport = $(this).attr("data-sport");
         var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
@@ -67,7 +69,44 @@
         $("#gifs-appear-here").prepend(sportDiv);
          }
       });
+      
     });
+    
+        // This function handles events where the add sport button is clicked
+            $("#add-sport").on("click", function(event) {
+                event.preventDefault();
+                // This line of code will grab the input from the textbox
+                var otherSport = $("#sport-input").val().trim();
+
+                // The movie from the textbox is then added to our array
+                sports.push(otherSport);
+
+                // Calling renderButtons which handles the processing of the sports array
+                renderButtons();
+                
+            });
+
+    });
+    function renderButtons() {
+        // Deletes the buttons prior to adding new sports
+        // (this is necessary otherwise or you will have repeated buttons)
+        $("#buttons-view").empty();
+        // Loop through the array of sports
+            for (var i = 0; i < sports.length; i++) {
+            // Then dynamicaly generates buttons for each sport in the array
+            // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
+            var a = $("<button>");
+            // Adds a class of btn btn-primary btn-lg to our button
+            a.addClass("btn btn-primary btn-lg");
+            // Added a data-attribute
+            a.attr("data-sport", sports[i]);
+            // Provided the initial button text
+            a.text(sports[i]);
+            console.log(a);
+            // Added the button to the buttons-view div
+            $("#buttons-view").append(a);
+            }
+    };
 
     </script>
 </body>
