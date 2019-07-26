@@ -29,64 +29,73 @@
     <script type="text/javascript">
 
     var sports = ["tennis","football","soccer","baseball","car-racing","basketball","horse-racing","volleyball","hockey","champions","lmb","real-madrid","barcelona","wwe","europe-league","bayern-munich","nfl","nhl"];
-    // when the page is loaded run this code
+
+// when the page is loaded then run this code
     $(function(){
     renderButtons();
+    clickButton();
+    addSport();
+        // this button handles displaying of gifs
+    function clickButton(){
+        $("button").on("click", function(){
+            var sport = $(this).attr("data-sport");
+            var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+            sport + "&api_key=RDz5eAFrHwo5sFgS2BggASUu986MLIFL&limit=10";
 
-    $("button").on("click", function(){
-        var sport = $(this).attr("data-sport");
-        var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
-        sport + "&api_key=RDz5eAFrHwo5sFgS2BggASUu986MLIFL&limit=10";
+            $.ajax({
+            url: queryURL,
+            method: "GET"
+        }).then(function(response) {
+            // Run this file, click a button, and see what the response object looks like in the browser's console.
+            console.log(response);
+            // image information is inside the data key, make a variable named results and set it equal to response.data
+            var results= response.data;
 
-        $.ajax({
-        url: queryURL,
-        method: "GET"
-      }).then(function(response) {
-        // Run this file, click a button, and see what the response object looks like in the browser's console.
-        console.log(response);
-        // image information is inside the data key, make a variable named results and set it equal to response.data
-        var results= response.data;
+            for (var i = 0; i < results.length; i++) {
 
-        for (var i = 0; i < results.length; i++) {
+            // Make a div with jQuery and store it in a variable named sportDiv.
+            var sportDiv = $("<div>");
+            // store the rating of the response for each image in a variable named rating
+            var rating = results[i].rating;
+            // Make a paragraph tag with jQuery and store it in a variable named p and set the inner text of the paragraph to the rating of the image in results[i].
+            var p = $("<p>").text("Rating: " + rating); 
+            // Make an image tag with jQuery and store it in a variable named sportImage.
+            var sportImage = $("<img>");
+            // Set the image's src to results[i]'s fixed_height.url.
+            sportImage.attr("src", results[i].images.fixed_height.url);
+                console.log(sportImage);
+                console.log(results[i].images.fixed_height.url);
+            // Append the p variable to the sportDiv variable.
+            sportDiv.append(p);
+            // Append the sportImage variable to the sportDiv variable.
+            sportDiv.append(sportImage);
+            // Prepend the sportDiv variable to the element with an id of gifs-appear-here.
+            $("#gifs-appear-here").prepend(sportDiv);
+            }
+        });
+        });
+    }
 
-        // Make a div with jQuery and store it in a variable named sportDiv.
-        var sportDiv = $("<div>");
-        // store the rating of the response for each image in a variable named rating
-        var rating = results[i].rating;
-        // Make a paragraph tag with jQuery and store it in a variable named p and set the inner text of the paragraph to the rating of the image in results[i].
-        var p = $("<p>").text("Rating: " + rating); 
-        // Make an image tag with jQuery and store it in a variable named sportImage.
-        var sportImage = $("<img>");
-        // Set the image's src to results[i]'s fixed_height.url.
-        sportImage.attr("src", results[i].images.fixed_height.url);
-            console.log(sportImage);
-            console.log(results[i].images.fixed_height.url);
-        // Append the p variable to the sportDiv variable.
-        sportDiv.append(p);
-        // Append the sportImage variable to the sportDiv variable.
-        sportDiv.append(sportImage);
-        // Prepend the sportDiv variable to the element with an id of gifs-appear-here.
-        $("#gifs-appear-here").prepend(sportDiv);
-         }
-      });
-      
-    });
-    
-        // This function handles events where the add sport button is clicked
-            $("#add-sport").on("click", function(event) {
-                event.preventDefault();
-                // This line of code will grab the input from the textbox
-                var otherSport = $("#sport-input").val().trim();
-
-                // The movie from the textbox is then added to our array
+        // This function handles when the add sport button is clicked
+    function addSport(){
+    $("#add-sport").on("click", function(event) {
+            event.preventDefault();
+            // This line of code will grab the input from the textbox
+            var otherSport = $("#sport-input").val().trim();
+            if(otherSport===""){
+                alert("please enter a value, billy!")
+            }
+            else{
+            // The movie from the textbox is then added to our array
                 sports.push(otherSport);
-
-                // Calling renderButtons which handles the processing of the sports array
-                renderButtons();
-                
-            });
-
-    });
+            // Calling renderButtons which handles the processing of the sports array
+            renderButtons();
+            //calling clickButton which handles the API call
+            clickButton();    
+            }
+        });
+    };
+        // this function handles creation of all buttons
     function renderButtons() {
         // Deletes the buttons prior to adding new sports
         // (this is necessary otherwise or you will have repeated buttons)
@@ -107,6 +116,8 @@
             $("#buttons-view").append(a);
             }
     };
+       
+    });
 
     </script>
 </body>
